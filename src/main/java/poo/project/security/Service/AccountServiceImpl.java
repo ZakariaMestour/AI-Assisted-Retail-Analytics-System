@@ -25,7 +25,6 @@ public class AccountServiceImpl implements AccountService {
     private final AppRoleRepository roleRepository;
     private AppUserRepository userRepository;
     private PasswordEncoder passwordEncoder;
-    //private GeneratePassword passwordGenerator;
 
     @Override
     public void addUserWithRoles(AppUser user) {
