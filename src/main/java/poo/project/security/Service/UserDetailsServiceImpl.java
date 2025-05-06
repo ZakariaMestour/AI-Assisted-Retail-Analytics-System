@@ -17,12 +17,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     AccountService accountService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser user = accountService.loadUserByUsername(username);
-        if (user == null) throw new UsernameNotFoundException(String.format("User %s not found", username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        AppUser user = accountService.loadUserByEmail(email);
+        if (user == null) throw new UsernameNotFoundException(String.format("User %s not found", email));
 
         UserDetails userDetails = User
-                .withUsername(username)
+                .withUsername(email)
                 .password(user.getPassword())
                 .roles(user.roles.stream().map(AppRole::getRole).toArray(String[]::new))
                 .build();

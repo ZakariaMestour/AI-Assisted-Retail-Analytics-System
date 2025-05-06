@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import poo.project.security.Entities.AppUser;
 
 public interface AppUserRepository extends JpaRepository<AppUser, String> {
-    AppUser findByUsername(String username);
+    AppUser findByEmail(String username);
+    AppUser findAppUserByUserId(String id);
 }
