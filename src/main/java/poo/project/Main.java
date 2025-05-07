@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import poo.project.security.Repositoty.AppRoleRepository;
-import poo.project.security.Service.AccountService;
-import java.security.SecureRandom;
+import poo.project.Security.Repositoty.AppRoleRepository;
+import poo.project.Security.Service.AccountService;
+
 @SpringBootApplication
 public class Main {
     @Autowired
@@ -19,7 +19,7 @@ public class Main {
 
     }
 
-//    @Bean
+    //    @Bean
     CommandLineRunner userDetailsManger(AccountService accountService) {
         return args -> {
             //accountService.addRole("MANGER");

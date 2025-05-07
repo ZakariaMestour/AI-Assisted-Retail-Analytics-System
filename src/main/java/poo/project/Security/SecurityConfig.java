@@ -1,4 +1,4 @@
-package poo.project.security;
+package poo.project.Security;
 
 import lombok.AllArgsConstructor;
 
@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import poo.project.security.Service.UserDetailsServiceImpl;
+import poo.project.Security.Service.UserDetailsServiceImpl;
 
 
 @Configuration

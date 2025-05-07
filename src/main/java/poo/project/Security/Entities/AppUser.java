@@ -1,4 +1,4 @@
-package poo.project.security.Entities;
+package poo.project.Security.Entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class AppUser {
     private String password;
     @Column(unique=true)
     private String email;
-
+    private String phoneNumber;
     @ManyToMany(fetch = FetchType.EAGER)
     public List<AppRole> roles = new ArrayList<>();
 }

@@ -1,9 +1,7 @@
-package poo.project.security.Service;
+package poo.project.Security.Service;
 
 
-import poo.project.security.Entities.AppRole;
-import poo.project.security.Entities.AppUser;
-import java.util.List;
+import poo.project.Security.Entities.AppUser;
 
 public interface AccountService {
     void addUserWithRoles(AppUser user);

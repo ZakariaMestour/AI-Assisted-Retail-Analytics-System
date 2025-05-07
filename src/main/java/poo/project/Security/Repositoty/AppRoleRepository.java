@@ -1,8 +1,8 @@
-package poo.project.security.Repositoty;
+package poo.project.Security.Repositoty;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import poo.project.security.Entities.AppRole;
+import poo.project.Security.Entities.AppRole;
 
 import java.util.Optional;
 

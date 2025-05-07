@@ -1,10 +1,8 @@
-package poo.project.security.Repositoty;
+package poo.project.Security.Repositoty;
 
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import poo.project.security.Entities.AppUser;
+import poo.project.Security.Entities.AppUser;
 
 public interface AppUserRepository extends JpaRepository<AppUser, String> {
     AppUser findByEmail(String username);

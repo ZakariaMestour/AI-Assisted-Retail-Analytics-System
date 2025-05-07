@@ -1,4 +1,4 @@
-package poo.project.security.Service;
+package poo.project.Security.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -6,10 +6,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import poo.project.Utils.PasswordUtil;
-import poo.project.security.Entities.AppRole;
-import poo.project.security.Entities.AppUser;
-import poo.project.security.Repositoty.AppRoleRepository;
-import poo.project.security.Repositoty.AppUserRepository;
+import poo.project.Security.Entities.AppRole;
+import poo.project.Security.Entities.AppUser;
+import poo.project.Security.Repositoty.AppRoleRepository;
+import poo.project.Security.Repositoty.AppUserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +57,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void addRole(String role) {
+        System.out.println("method role: " + role);
         AppRole appRole = roleRepository.findByRole(role).orElse(null);
         if (appRole != null) throw new RuntimeException("This role already exists");
         appRole = AppRole.builder().id(UUID.randomUUID().toString()).role(role).build();

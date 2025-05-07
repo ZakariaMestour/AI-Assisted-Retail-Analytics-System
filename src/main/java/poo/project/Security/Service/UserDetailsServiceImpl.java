@@ -1,14 +1,13 @@
-package poo.project.security.Service;
+package poo.project.Security.Service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import poo.project.security.Entities.AppRole;
-import poo.project.security.Entities.AppUser;
+import poo.project.Security.Entities.AppRole;
+import poo.project.Security.Entities.AppUser;
 
 @Service
 @AllArgsConstructor
