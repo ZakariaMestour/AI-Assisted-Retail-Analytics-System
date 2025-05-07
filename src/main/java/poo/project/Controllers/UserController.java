@@ -2,7 +2,6 @@ package poo.project.Controllers;
 
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import poo.project.Security.Entities.AppRole;
@@ -35,7 +34,6 @@ public class UserController {
     public ResponseEntity<?> addRole(@RequestBody AppRole roleObj) {
         String role = roleObj.getRole();
         accountService.addRole(role);
-
         return ResponseEntity.ok(new ApiResponse<>(true,"Role has been added",null));
     }
 
@@ -54,17 +52,9 @@ public class UserController {
     }
 
 
-
-
-
-
     @GetMapping("/{id}")
     public AppUser getUser(@PathVariable String id) {
         return userService.getUserById(id);
     }
-
-
-
-
 
 }
