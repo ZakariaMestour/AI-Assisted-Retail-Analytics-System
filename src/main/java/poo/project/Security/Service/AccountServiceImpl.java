@@ -56,12 +56,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void addRole(String role) {
+    public String addRole(String role) {
         System.out.println("method role: " + role);
         AppRole appRole = roleRepository.findByRole(role).orElse(null);
         if (appRole != null) throw new RuntimeException("This role already exists");
         appRole = AppRole.builder().id(UUID.randomUUID().toString()).role(role).build();
         roleRepository.save(appRole);
+        return "role has been added";
     }
 
 
