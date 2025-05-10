@@ -1,9 +1,12 @@
 package poo.project.Utils;
+import org.springframework.stereotype.Service;
+
 import java.security.SecureRandom;
 
+@Service
 public class PasswordUtil {
 
-    public static String generatePassword(int length) {
+    public  String generatePassword(int length) {
         String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String lower = upper.toLowerCase();
         String digits = "0123456789";
@@ -19,4 +22,6 @@ public class PasswordUtil {
 
         return password.toString();
     }
+
+
 }

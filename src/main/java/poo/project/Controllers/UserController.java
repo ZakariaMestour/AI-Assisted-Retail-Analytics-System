@@ -7,8 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import poo.project.Dto.AppUserDTO;
 import poo.project.Exceptiions.RoleAlreadyExistsException;
+import poo.project.Exceptiions.RoleNotFoundException;
 import poo.project.Exceptiions.UserAlreadyExistsException;
 import poo.project.Exceptiions.UserNotFoundException;
+import poo.project.Security.Service.AccountService;
+import poo.project.Security.Service.AccountServiceImpl;
 import poo.project.Services.UserService;
 import poo.project.Utils.ApiResponse;
 
@@ -18,6 +21,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
+    private final AccountService accountService;
     private UserService userService;
 
     @GetMapping
@@ -26,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AppUserDTO>> saveUser(@Valid @RequestBody AppUserDTO userDTO) throws UserAlreadyExistsException, RoleAlreadyExistsException {
+    public ResponseEntity<ApiResponse<AppUserDTO>> saveUser(@Valid @RequestBody AppUserDTO userDTO) throws UserAlreadyExistsException, RoleNotFoundException {
         return userService.saveUser(userDTO);
     }
 
@@ -35,9 +39,9 @@ public class UserController {
             return userService.deleteUserById(id);
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<ApiResponse<AppUserDTO>> editUser(@Valid @RequestBody AppUserDTO userDTO,@PathVariable String id) throws UserAlreadyExistsException, RoleAlreadyExistsException {
-        return userService.editUser(userDTO);
+    @PutMapping
+    public ResponseEntity<ApiResponse<AppUserDTO>> editUser(@Valid @RequestBody AppUserDTO userDTO) throws UserNotFoundException, RoleAlreadyExistsException {
+        return userService.updateUser(userDTO);
     }
 
     @GetMapping("/{id}")
@@ -45,4 +49,8 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @PostMapping("/addRole")
+    public String addRole(@RequestBody String role){
+        return accountService.addRole(role) ;
+    }
 }

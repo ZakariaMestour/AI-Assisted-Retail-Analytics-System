@@ -14,6 +14,11 @@ public class AccountMapperImp {
         return appUser;
     }
 
+    public AppUser fromUserDTO(AppUserDTO userDTO,AppUser appUser) {
+        BeanUtils.copyProperties(userDTO, appUser);
+        return appUser;
+    }
+
     public AppUserDTO fromUser(AppUser appUser) {
         AppUserDTO appUserDTO = new AppUserDTO();
         BeanUtils.copyProperties(appUser, appUserDTO);

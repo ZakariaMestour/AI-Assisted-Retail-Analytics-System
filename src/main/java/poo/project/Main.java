@@ -8,7 +8,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import poo.project.Dto.AppUserDTO;
 import poo.project.Exceptiions.RoleAlreadyExistsException;
+import poo.project.Exceptiions.RoleNotFoundException;
 import poo.project.Exceptiions.UserAlreadyExistsException;
+import poo.project.Security.Service.AccountService;
 import poo.project.Services.UserService;
 
 import java.util.stream.Stream;
@@ -21,15 +23,19 @@ public class Main {
     }
 
     @Bean
-    CommandLineRunner userDetailsManger(UserService userService) {
-        return args -> Stream.of("Houssam","Imran","Wafae","Zakaria").forEach(name -> {
-            try {
-                userService.saveUser(new AppUserDTO(name,name,name+"@gmail.com",String.valueOf(Math.round(Math.random()*100000000))));
+    CommandLineRunner userDetailsManger(UserService userService, AccountService accountService) {
+        return args ->{
+            Stream.of("Manager","Admin","Sub Manager").forEach(accountService::addRole);
 
-            } catch (UserAlreadyExistsException | RoleAlreadyExistsException e) {
-                throw new RuntimeException(e);
-            }
-        });
+            Stream.of("Houssam","Imran","Wafae","Zakaria").forEach(name -> {
+                try {
+                    userService.saveUser(new AppUserDTO(name,name,name+"@gmail.com",String.valueOf(Math.round(Math.random()*100000000))));
+
+                } catch (UserAlreadyExistsException | RoleNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        };
     }
 
     @Bean

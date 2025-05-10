@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import poo.project.Dto.AppUserDTO;
 import poo.project.Exceptiions.RoleAlreadyExistsException;
+import poo.project.Exceptiions.RoleNotFoundException;
 import poo.project.Exceptiions.UserAlreadyExistsException;
 import poo.project.Exceptiions.UserNotFoundException;
 import poo.project.Mappers.AccountMapperImp;
@@ -25,10 +26,10 @@ public class UserService {
     private final AccountService accountService;
     private final AccountMapperImp accountMapper;
 
-    public ResponseEntity<ApiResponse< List<AppUserDTO>>> getAllUsers(){
+    public ResponseEntity<ApiResponse<List<AppUserDTO> >> getAllUsers(){
         List<AppUser> users = userRepository.findAll();
         List<AppUserDTO> usersDTO = users.stream().map(accountMapper::fromUser).toList();
-        return  !usersDTO.isEmpty()? ResponseEntity.ok(new ApiResponse<>(true,"Users list",usersDTO)):ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false,"No user found",usersDTO));
+        return  !usersDTO.isEmpty()? ResponseEntity.ok(new ApiResponse<>(true,"Users list",usersDTO)) : ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false,"No user found",usersDTO));
     }
 
     public ResponseEntity<ApiResponse<AppUserDTO>> getUserById(String id) throws  UserNotFoundException {
@@ -36,7 +37,7 @@ public class UserService {
         return ResponseEntity.ok(new ApiResponse<>(true,"User found",accountMapper.fromUser(user)));
     }
 
-    public ResponseEntity<ApiResponse<AppUserDTO>> saveUser(AppUserDTO user) throws UserAlreadyExistsException, RoleAlreadyExistsException {
+    public ResponseEntity<ApiResponse<AppUserDTO>> saveUser(AppUserDTO user) throws UserAlreadyExistsException, RoleNotFoundException {
         return accountService.saveUserWithRoles(user);
     }
 
@@ -46,8 +47,8 @@ public class UserService {
         return ResponseEntity.ok(new ApiResponse<>(true, "User deleted successfully"));
     }
 
-    public ResponseEntity<ApiResponse<AppUserDTO>> editUser(AppUserDTO userDTO) throws UserAlreadyExistsException, RoleAlreadyExistsException {
-        return accountService.saveUserWithRoles(userDTO);
+    public ResponseEntity<ApiResponse<AppUserDTO>> updateUser(AppUserDTO userDTO) throws RoleAlreadyExistsException, UserNotFoundException {
+        return accountService.updateUserWithRoles(userDTO);
     }
 
 
