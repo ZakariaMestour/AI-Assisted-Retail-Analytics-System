@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,4 +24,6 @@ public class AppUser {
     private String phoneNumber;
     @ManyToMany(fetch = FetchType.EAGER)
     public List<AppRole> roles = new ArrayList<>();
+
+
 }

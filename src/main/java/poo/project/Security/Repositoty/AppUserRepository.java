@@ -6,5 +6,4 @@ import poo.project.Security.Entities.AppUser;
 
 public interface AppUserRepository extends JpaRepository<AppUser, String> {
     AppUser findByEmail(String username);
-    AppUser findAppUserByUserId(String id);
 }

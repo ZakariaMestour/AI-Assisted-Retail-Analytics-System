@@ -1,65 +1,54 @@
 package poo.project.Services;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import poo.project.Utils.PasswordUtil;
-import poo.project.Security.Entities.AppRole;
+import poo.project.Dto.AppUserDTO;
+import poo.project.Exceptiions.RoleAlreadyExistsException;
+import poo.project.Exceptiions.UserAlreadyExistsException;
+import poo.project.Exceptiions.UserNotFoundException;
+import poo.project.Mappers.AccountMapperImp;
+import poo.project.Utils.ApiResponse;
 import poo.project.Security.Entities.AppUser;
-import poo.project.Security.Repositoty.AppRoleRepository;
 import poo.project.Security.Repositoty.AppUserRepository;
 import poo.project.Security.Service.AccountService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
+@Transactional
 @Service @AllArgsConstructor
 public class UserService {
-    private AppRoleRepository appRoleRepository;
-    private AppUserRepository userRepository;
-    private AccountService accountService;
-    private PasswordEncoder passwordEncoder;
-    public List<AppUser> getAllUsers(){
-        return userRepository.findAll();
+
+    private final AppUserRepository userRepository;
+    private final AccountService accountService;
+    private final AccountMapperImp accountMapper;
+
+    public ResponseEntity<ApiResponse< List<AppUserDTO>>> getAllUsers(){
+        List<AppUser> users = userRepository.findAll();
+        List<AppUserDTO> usersDTO = users.stream().map(accountMapper::fromUser).toList();
+        return  !usersDTO.isEmpty()? ResponseEntity.ok(new ApiResponse<>(true,"Users list",usersDTO)):ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false,"No user found",usersDTO));
     }
 
-    public void saveUser(AppUser user){
-        accountService.addUserWithRoles(user);
+    public ResponseEntity<ApiResponse<AppUserDTO>> getUserById(String id) throws  UserNotFoundException {
+        AppUser user =userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User not found"));
+        return ResponseEntity.ok(new ApiResponse<>(true,"User found",accountMapper.fromUser(user)));
     }
 
+    public ResponseEntity<ApiResponse<AppUserDTO>> saveUser(AppUserDTO user) throws UserAlreadyExistsException, RoleAlreadyExistsException {
+        return accountService.saveUserWithRoles(user);
+    }
 
-    @Transactional
-    public void deleteUserById(String id){
+    public  ResponseEntity<ApiResponse<Void>> deleteUserById(String id) throws UserNotFoundException {
+        userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User not found"));
         userRepository.deleteById(id);
-
+        return ResponseEntity.ok(new ApiResponse<>(true, "User deleted successfully"));
     }
 
-    public void editUser(AppUser user){
-        List<AppRole> attachedRoles = new ArrayList<>();
-        if (user.roles != null) {
-            for (AppRole inputRole : user.roles) {
-                AppRole appRole = appRoleRepository.findByRole(inputRole.getRole())
-                        .orElseThrow(() -> new RuntimeException("Role not found: " + inputRole.getRole()));
-                attachedRoles.add(appRole);
-            }
-        }
-        AppUser newUser = AppUser.builder()
-                .userId(user.getUserId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .roles(attachedRoles)
-                .build();
-
-        userRepository.save(newUser);
+    public ResponseEntity<ApiResponse<AppUserDTO>> editUser(AppUserDTO userDTO) throws UserAlreadyExistsException, RoleAlreadyExistsException {
+        return accountService.saveUserWithRoles(userDTO);
     }
 
-    public AppUser getUserById(String id){
-        return userRepository.findAppUserByUserId(id);
-    }
 
 }

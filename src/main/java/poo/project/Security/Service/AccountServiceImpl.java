@@ -3,14 +3,18 @@ package poo.project.Security.Service;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import poo.project.Utils.PasswordUtil;
+import poo.project.Dto.AppUserDTO;
+import poo.project.Exceptiions.RoleAlreadyExistsException;
+import poo.project.Exceptiions.UserAlreadyExistsException;
+import poo.project.Mappers.AccountMapperImp;
+import poo.project.Utils.ApiResponse;
 import poo.project.Security.Entities.AppRole;
 import poo.project.Security.Entities.AppUser;
 import poo.project.Security.Repositoty.AppRoleRepository;
 import poo.project.Security.Repositoty.AppUserRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,35 +28,40 @@ public class AccountServiceImpl implements AccountService {
 
     private final AppRoleRepository roleRepository;
     private AppUserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final AccountMapperImp accountMapperImp;
 
     @Override
-    public void addUserWithRoles(AppUser user) {
+    public ResponseEntity<ApiResponse<AppUserDTO>> saveUserWithRoles(AppUserDTO userDTO) throws UserAlreadyExistsException, RoleAlreadyExistsException {
 
-        if (userRepository.findByEmail(user.getEmail()) != null) {
-            throw new RuntimeException("This user already exists");
+        if (isEmailTaken(userDTO)) {
+            System.out.println("Email taken");
+            throw new UserAlreadyExistsException("This email is already in use by another user");
         }
+            System.out.println("Email was not taken");
 
-
+        //loop through list of roles and check if they all exist
         List<AppRole> attachedRoles = new ArrayList<>();
-        if (user.roles != null) {
-            for (AppRole inputRole : user.roles) {
+        if (userDTO.getRoles() != null) {
+            for (AppRole inputRole : userDTO.getRoles()) {
                 AppRole appRole = roleRepository.findByRole(inputRole.getRole())
-                        .orElseThrow(() -> new RuntimeException("Role not found: " + inputRole.getRole()));
+                        .orElseThrow(() -> new RoleAlreadyExistsException("Role not found: " + inputRole.getRole()));
                 attachedRoles.add(appRole);
             }
+            userDTO.setRoles(attachedRoles);
         }
 
-        AppUser newUser = AppUser.builder()
-                .userId(UUID.randomUUID().toString())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .password(passwordEncoder.encode(PasswordUtil.generatePassword(12)))
-                .roles(attachedRoles)
-                .build();
+        //generate the id if new user
+        if (userDTO.getUserId() == null) {
+            userDTO.setUserId(UUID.randomUUID().toString());
+        }
 
-        userRepository.save(newUser);
+        //map the dto user to an entity user
+        AppUser newUser = accountMapperImp.fromUserDTO(userDTO);
+
+        // save the new user then remap it back to a dto user that will be sent to the font-end
+        AppUserDTO savedUserDTO =  accountMapperImp.fromUser(userRepository.save(newUser));
+
+        return ResponseEntity.ok(new ApiResponse<>(true,"User has been saved successfully",savedUserDTO));
     }
 
     @Override
@@ -88,4 +97,10 @@ public class AccountServiceImpl implements AccountService {
     public AppUser loadUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    private boolean isEmailTaken(AppUserDTO userDTO) {
+        AppUser existingUser = userRepository.findByEmail(userDTO.getEmail());
+        return existingUser!=null && existingUser.getUserId().equals(userDTO.getUserId());
+    }
+
 }

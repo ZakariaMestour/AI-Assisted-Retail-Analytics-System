@@ -1,12 +1,14 @@
 package poo.project.Controllers;
 
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import poo.project.Security.Entities.AppRole;
-import poo.project.Security.Entities.AppUser;
-import poo.project.Security.Service.AccountService;
+import poo.project.Dto.AppUserDTO;
+import poo.project.Exceptiions.RoleAlreadyExistsException;
+import poo.project.Exceptiions.UserAlreadyExistsException;
+import poo.project.Exceptiions.UserNotFoundException;
 import poo.project.Services.UserService;
 import poo.project.Utils.ApiResponse;
 
@@ -16,44 +18,30 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private AccountService accountService;
     private UserService userService;
 
     @GetMapping
-    public List<AppUser> getAllUsers() {
+    public ResponseEntity<ApiResponse< List<AppUserDTO>>> getAllUsers() {
         return this.userService.getAllUsers();
     }
+
     @PostMapping
-    public AppUser addUser(@RequestBody AppUser user) {
-        userService.saveUser(user);
-        return user;
-    }
-
-
-    @PostMapping("/addRole")
-    public ResponseEntity<?> addRole(@RequestBody AppRole roleObj) {
-        String role = roleObj.getRole();
-        accountService.addRole(role);
-        return ResponseEntity.ok(new ApiResponse<>(true,"Role has been added",null));
+    public ResponseEntity<ApiResponse<AppUserDTO>> saveUser(@Valid @RequestBody AppUserDTO userDTO) throws UserAlreadyExistsException, RoleAlreadyExistsException {
+        return userService.saveUser(userDTO);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable String id) {
-        try {
-            userService.deleteUserById(id);
-            return "User deleted successfully";
-        } catch (Exception e) {
-            return "Error deleting user: " ;
-        }
-    }
-    @PutMapping
-    public void editUser(@RequestBody AppUser user) {
-        userService.editUser(user);
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable String id) throws UserNotFoundException  {
+            return userService.deleteUserById(id);
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<ApiResponse<AppUserDTO>> editUser(@Valid @RequestBody AppUserDTO userDTO,@PathVariable String id) throws UserAlreadyExistsException, RoleAlreadyExistsException {
+        return userService.editUser(userDTO);
+    }
 
     @GetMapping("/{id}")
-    public AppUser getUser(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<AppUserDTO>> getUser(@PathVariable String id) throws UserNotFoundException {
         return userService.getUserById(id);
     }
 
