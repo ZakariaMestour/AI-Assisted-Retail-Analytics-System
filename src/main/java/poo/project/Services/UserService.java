@@ -41,14 +41,14 @@ public class UserService {
         return accountService.saveUserWithRoles(user);
     }
 
+    public ResponseEntity<ApiResponse<AppUserDTO>> updateUser(AppUserDTO userDTO) throws RoleAlreadyExistsException, UserNotFoundException {
+        return accountService.updateUserWithRoles(userDTO);
+    }
+
     public  ResponseEntity<ApiResponse<Void>> deleteUserById(String id) throws UserNotFoundException {
         userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User not found"));
         userRepository.deleteById(id);
         return ResponseEntity.ok(new ApiResponse<>(true, "User deleted successfully"));
-    }
-
-    public ResponseEntity<ApiResponse<AppUserDTO>> updateUser(AppUserDTO userDTO) throws RoleAlreadyExistsException, UserNotFoundException {
-        return accountService.updateUserWithRoles(userDTO);
     }
 
 

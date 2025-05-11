@@ -130,17 +130,4 @@ public class AccountServiceImpl implements AccountService {
         return existingUser!=null && existingUser.getUserId().equals(userDTO.getUserId());
     }
 
-    private void checkIfRoleExists(AppUserDTO userDTO) throws RoleAlreadyExistsException {
-        //loop through list of roles and check for their existence
-        List<AppRole> attachedRoles = new ArrayList<>();
-        if (userDTO.getRoles() != null) {
-            for (AppRole inputRole : userDTO.getRoles()) {
-                AppRole appRole = roleRepository.findByRole(inputRole.getRole())
-                        .orElseThrow(() -> new RoleAlreadyExistsException("Role not found: " + inputRole.getRole()));
-                attachedRoles.add(appRole);
-            }
-            userDTO.setRoles(attachedRoles);
-        }
-    }
-
 }
