@@ -5,13 +5,12 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import poo.project.Dto.AppUserDTO;
+import poo.project.Dtos.AppUserDTO;
 import poo.project.Exceptiions.RoleAlreadyExistsException;
 import poo.project.Exceptiions.RoleNotFoundException;
 import poo.project.Exceptiions.UserAlreadyExistsException;
 import poo.project.Exceptiions.UserNotFoundException;
 import poo.project.Security.Service.AccountService;
-import poo.project.Security.Service.AccountServiceImpl;
 import poo.project.Services.UserService;
 import poo.project.Utils.ApiResponse;
 

@@ -15,11 +15,14 @@ public class Store {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String email;
+    private String phoneNumber;
+    private String country;
     private String address;
     @OneToMany(fetch = FetchType.EAGER)
     private List<AppUser> users=new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.EAGER) //puuush
+    private Object workHours;
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Zone> zones=new ArrayList<>();
 
 }

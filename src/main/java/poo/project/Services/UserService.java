@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import poo.project.Dto.AppUserDTO;
+import poo.project.Dtos.AppUserDTO;
 import poo.project.Exceptiions.RoleAlreadyExistsException;
 import poo.project.Exceptiions.RoleNotFoundException;
 import poo.project.Exceptiions.UserAlreadyExistsException;

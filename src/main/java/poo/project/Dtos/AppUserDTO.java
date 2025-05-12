@@ -1,4 +1,4 @@
-package poo.project.Dto;
+package poo.project.Dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

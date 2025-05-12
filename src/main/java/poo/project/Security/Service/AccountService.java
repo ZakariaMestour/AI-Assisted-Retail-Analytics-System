@@ -2,7 +2,7 @@ package poo.project.Security.Service;
 
 
 import org.springframework.http.ResponseEntity;
-import poo.project.Dto.AppUserDTO;
+import poo.project.Dtos.AppUserDTO;
 import poo.project.Exceptiions.RoleAlreadyExistsException;
 import poo.project.Exceptiions.RoleNotFoundException;
 import poo.project.Exceptiions.UserAlreadyExistsException;

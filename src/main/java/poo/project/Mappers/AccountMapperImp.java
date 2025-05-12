@@ -2,7 +2,7 @@ package poo.project.Mappers;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import poo.project.Dto.AppUserDTO;
+import poo.project.Dtos.AppUserDTO;
 import poo.project.Security.Entities.AppUser;
 
 @Service
