@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class DayHours {
+    private String day;
     private String open;
     private String close;
 }

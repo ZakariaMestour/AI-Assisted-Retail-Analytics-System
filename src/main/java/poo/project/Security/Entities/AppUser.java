@@ -1,10 +1,12 @@
 package poo.project.Security.Entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import poo.project.Entities.Store;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,9 @@ public class AppUser {
     private String phoneNumber;
     @ManyToMany(fetch = FetchType.EAGER)
     public List<AppRole> roles = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Store store;
 
 
 }
